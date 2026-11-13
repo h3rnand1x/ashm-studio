@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASHM. | Creative Studio</title>
+<style>
+:root{--bg:#0b1120;--panel:#142239;--line:#293c58;--text:#edf3ff;--muted:#9aabc3;--blue:#557eb8;--shirt:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#0e1727;border-right:1px solid var(--line);padding:18px 10px;flex-shrink:0}
+.logo{font-size:29px;font-weight:900;letter-spacing:3px;padding:8px 12px 25px}
+.logo span{color:#91b3e6}
+.section{font-size:10px;color:#7187a7;letter-spacing:2px;padding:14px 12px 6px}
+nav button{display:block;width:100%;padding:11px 12px;border:0;border-radius:8px;background:none;color:#c5d3e6;text-align:left;margin:2px 0}
+nav button:hover,nav button.active{background:#223854;color:white}
+.main{flex:1;min-width:0}
+.top{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;color:var(--muted);font-size:12px}
+.page{display:none;padding:30px;max-width:1250px;margin:auto}
+.page.active{display:block}
+h1{font-size:32px;margin:0 0 10px}
+p{color:var(--muted);line-height:1.6}
+.eyebrow{font-size:11px;letter-spacing:2px;color:#9bb9e8}
+.btn{background:#1c2d46;border:1px solid #405775;color:white;padding:10px 14px;border-radius:8px}
+.primary{background:#355d96;border-color:#557eb8}
+.hero{min-height:calc(100vh - 58px);display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center;padding:30px 5%}
+.hero h1{font-size:clamp(42px,6vw,76px);line-height:.98;letter-spacing:-3px;margin:20px 0}
+.hero h1 span{color:#91b3e6}
+.hero p{max-width:430px}
+.feature{background:linear-gradient(145deg,#1b304e,#101a2b);border:1px solid var(--line);border-radius:18px;padding:24px;min-height:350px;display:flex;flex-direction:column;justify-content:space-between}
+.feature-art{height:230px;display:grid;place-items:center;font-size:110px;background:radial-gradient(ellipse,#526c90,#16243a 70%);border-radius:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:15px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.thumb{height:110px;background:linear-gradient(145deg,#2b4568,#111d30);border-radius:9px;display:grid;place-items:center;font-size:42px}
+.card h3{margin-bottom:5px}
+.card p{font-size:12px}
+.editor{display:flex;height:calc(100vh - 58px);min-height:550px;margin:-30px}
+.tools,.properties{background:#101b2d;padding:13px;width:175px;overflow:auto;flex-shrink:0}
+.tools{border-right:1px solid var(--line)}
+.properties{border-left:1px solid var(--line)}
+.tools h4,.properties h4{font-size:10px;letter-spacing:1.5px;color:#8da7cc}
+.tools button{display:block;width:100%;text-align:left;background:none;border:0;color:#c7d5e8;padding:10px 6px;border-radius:7px;font-size:12px}
+.tools button:hover{background:#263d5d}
+.workspace{flex:1;min-width:0;background:#e9edf3;color:#28374d;padding:15px;display:flex;flex-direction:column}
+.workhead{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:10px}
+.canvas{position:relative;flex:1;min-height:350px;background:linear-gradient(140deg,#fff,#e6ebf2);border-radius:10px;overflow:hidden;display:grid;place-items:center;touch-action:none}
+.shirt-wrap{height:82%;width:min(60%,360px);display:grid;place-items:center;perspective:900px;cursor:grab}
+.shirt{width:100%;height:100%;position:relative;transform-style:preserve-3d;filter:drop-shadow(0 14px 12px #26364a30)}
+.shirt svg{position:absolute;width:100%;height:100%;inset:0;backface-visibility:hidden}
+.shirt .back{transform:rotateY(180deg)}
+.shirt-shape{fill:var(--shirt);stroke:#c6ced9;stroke-width:2}
+.design{position:absolute;z-index:3;left:50%;top:43%;transform:translate(-50%,-50%);cursor:move;white-space:nowrap;font-weight:bold;user-select:none}
+.design.selected{outline:1px dashed #4778bc;outline-offset:5px}
+.design img{max-width:130px;max-height:130px;display:block;pointer-events:none}
+.properties label,.form label{display:block;font-size:11px;color:#bdcce0;margin:14px 0 6px}
+.properties input,.properties select,.form input,.form textarea{width:100%;padding:9px;border:1px solid #405573;background:#1b2b43;color:white;border-radius:7px}
+.properties input[type=color]{height:38px;padding:3px}
+.layers{font-size:11px}
+.layer{padding:8px;border-bottom:1px solid #2a3c56;cursor:pointer}
+.layer.active{background:#294365}
+.form{max-width:520px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.form input,.form textarea{margin-bottom:12px}
+.empty{padding:25px;border:1px dashed #405573;border-radius:10px;color:var(--muted);text-align:center}
+@media(max-width:850px){.sidebar{width:175px}.tools{width:130px}.properties{width:155px}}
+@media(max-width:650px){.sidebar{width:58px;padding:8px 4px}.logo{font-size:16px;padding:10px 4px}.section{display:none}nav button{font-size:0;text-align:center;padding:13px 2px}.properties{display:none}.hero{grid-template-columns:1fr;padding:25px}.page{padding:18px}.editor{margin:-18px}.tools{width:112px;padding:8px 5px}.tools button{font-size:10px;padding:9px 3px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="logo">ASHM<span>.</span></div>
+<nav>
+<div class="section">ESTUDIO</div>
+<button class="active" data-page="inicio">⌂　Inicio</button>
+<button data-page="disenar">✳　Diseñar ropa</button>
+<button data-page="mis-disenos">▧　Mis diseños</button>
+<div class="section">CREATIVIDAD</div>
+<button data-page="outfits">◈　Crear outfits</button>
+<button data-page="marca">✦　Mi marca</button>
+<button data-page="estampados">▤　Estampados</button>
+<button data-page="escuela">▣　Escuela de diseño</button>
+<button data-page="vista">◇　Vista 360°</button>
+<button data-page="colecciones">▧　Mis colecciones</button>
+<button data-page="asistente">☏　Asistente</button>
+<button data-page="inspiracion">⌕　Inspiración</button>
+<button data-page="ideas">✧　Generador de ideas</button>
+<div class="section">CUENTA</div>
+<button data-page="cuenta">♙　Mi cuenta</button>
+<button data-page="config">⚙　Configuración</button>
+</nav>
+</aside>
+
+<main class="main">
+<header class="top">
+<span id="breadcrumb">ASHM. / INICIO</span>
+<span>ESTUDIO PERSONAL　<button class="btn primary" onclick="saveDesign()">Guardar diseño</button></span>
+</header>
+
+<section class="page active" id="page-inicio">
+<div class="hero">
+<div>
+<div class="eyebrow">TU ESTUDIO. TUS REGLAS.</div>
+<h1>CREA TU<br>PROPIO ESTILO.<br><span>SE VOS.</span></h1>
+<p>No sigas tendencias. Creá las tuyas. Diseñá prendas, inventá estampados y armá tu propia colección.</p>
+<button class="btn primary" onclick="go('disenar')">＋ Comenzar a diseñar</button>
+</div>
+<div class="feature">
+<div class="feature-art">✦</div>
+<div><div class="eyebrow">ASHM. CREATIVE STUDIO</div><h2>Tu próxima idea empieza acá.</h2><p>Un espacio personal para experimentar, probar y crear.</p></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-disenar">
+<div class="editor">
+<aside class="tools">
+<h4>HERRAMIENTAS</h4>
+<button onclick="addText()">T　Agregar texto</button>
+<button onclick="document.getElementById('upload').click()">▧　Subir imagen</button>
+<input type="file" id="upload" accept="image/*" hidden>
+<button onclick="toggleDraw()" id="drawButton">✎　Dibujar</button>
+<button onclick="addShape()">◇　Agregar símbolo</button>
+<button onclick="undo()">↶　Deshacer</button>
+<button onclick="deleteSelected()">⌫　Eliminar</button>
+<button onclick="turn(-45)">↶　Girar izquierda</button>
+<button onclick="turn(45)">↻　Girar derecha</button>
+</aside>
+
+<section class="workspace">
+<div class="workhead"><b>ÁREA DE DISEÑO</b><span id="viewLabel">Frente</span></div>
+<div class="canvas" id="canvas">
+<div class="shirt-wrap" id="shirtWrap">
+<div class="shirt" id="shirt">
+<svg viewBox="0 0 400 440">
+<path class="shirt-shape" d="M130 35 L175 20 Q200 48 225 20 L270 35 L365 100 L320 175 L275 145 L275 415 L125 415 L125 145 L80 175 L35 100 Z"/>
+<path d="M175 20 Q200 85 225 20" fill="none" stroke="#c6ced9" stroke-width="2"/>
+</svg>
+<svg class="back" viewBox="0 0 400 440">
+<path class="shirt-shape" d="M130 35 L175 20 Q200 48 225 20 L270 35 L365 100 L320 175 L275 145 L275 415 L125 415 L125 145 L80 175 L35 100 Z"/>
+<path d="M175 20 Q200 85 225 20" fill="none" stroke="#c6ced9" stroke-width="2"/>
+</svg>
+</div>
+</div>
+<canvas id="drawing" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
+</div>
+<div class="workhead"><span>Arrastrá los elementos para moverlos.</span><span>ASHM. STUDIO</span></div>
+</section>
+
+<aside class="properties">
+<h4>PROPIEDADES</h4>
+<label>Color de prenda</label><input type="color" id="shirtColor" value="#f4f4f4">
+<label>Texto</label><input id="textValue" placeholder="Tu diseño">
+<button class="btn primary" style="width:100%;margin-top:8px" onclick="addText()">Agregar</button>
+<label>Fuente</label>
+<select id="font"><option>Arial</option><option>Georgia</option><option>Impact</option><option>Courier New</option><option>Trebuchet MS</option></select>
+<label>Color del elemento</label><input type="color" id="ink" value="#111111">
+<label>Tamaño</label><input type="range" id="size" min="12" max="72" value="28">
+<label>Capas</label><div id="layers" class="layers">Sin elementos</div>
+<button class="btn" onclick="layerMove(-1)">Subir capa</button>
+<button class="btn" onclick="layerMove(1)">Bajar capa</button>
+</aside>
+</div>
+</section>
+
+<section class="page" id="page-mis-disenos">
+<h1>Mis diseños</h1><p>Proyectos guardados en este navegador.</p><div class="cards" id="saved"></div>
+</section>
+
+<section class="page" id="page-outfits">
+<h1>Crear outfits</h1><p>Combiná prendas, calzado y accesorios.</p>
+<div class="cards">
+<div class="card"><div class="thumb">👕</div><h3>Parte superior</h3><p>Remeras, hoodies y camperas.</p></div>
+<div class="card"><div class="thumb">👖</div><h3>Parte inferior</h3><p>Pantalones y bermudas.</p></div>
+<div class="card"><div class="thumb">👟</div><h3>Calzado</h3><p>Completá tu conjunto.</p></div>
+<div class="card"><div class="thumb">🧢</div><h3>Accesorios</h3><p>Los detalles finales.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-marca">
+<h1>Mi marca</h1><p>Construí la identidad de tu marca.</p>
+<div class="form"><label>Nombre de tu marca</label><input id="brandName" placeholder="Nombre"><label>Descripción</label><textarea id="brandDesc" rows="4" placeholder="¿Qué representa tu marca?"></textarea><button class="btn primary" onclick="saveBrand()">Guardar identidad</button><p id="brandStatus"></p></div>
+</section>
+
+<section class="page" id="page-estampados">
+<h1>Estampados</h1><p>Ideas para crear tus gráficos.</p>
+<div class="cards">
+<div class="card"><div class="thumb">✳</div><h3>Geométricos</h3><p>Formas y repeticiones.</p></div>
+<div class="card"><div class="thumb">〰</div><h3>Abstractos</h3><p>Composiciones libres.</p></div>
+<div class="card"><div class="thumb">Aa</div><h3>Tipográficos</h3><p>Letras y símbolos.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-escuela">
+<h1>Escuela de diseño</h1><p>Conceptos para aprender diseño de moda.</p>
+<div class="cards">
+<div class="card"><h3>Bocetos</h3><p>Practicá siluetas, proporciones y formas.</p></div>
+<div class="card"><h3>Tipografía</h3><p>Elegí letras que representen tu diseño.</p></div>
+<div class="card"><h3>Composición</h3><p>Aprendé a distribuir los elementos.</p></div>
+<div class="card"><h3>Streetwear</h3><p>Explorá siluetas y estilos urbanos.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-vista">
+<h1>Vista 360°</h1><p>Podés girar la camiseta en el editor para ver el frente y la espalda. Esta versión utiliza un mockup ilustrado, no un modelo profesional de tela 3D.</p><button class="btn primary" onclick="go('disenar')">Abrir editor</button>
+</section>
+
+<section class="page" id="page-colecciones">
+<h1>Mis colecciones</h1><p>Organizá tus diseños por temporada o estilo.</p>
+<div class="form"><label>Nueva colección</label><input id="collectionName" placeholder="Ej. Streetwear"><button class="btn primary" onclick="addCollection()">Crear colección</button></div><div class="cards" id="collections"></div>
+</section>
+
+<section class="page" id="page-asistente">
+<h1>Asistente de diseño</h1><p>Organizá tus ideas paso a paso.</p>
+<div class="form"><label>Describí tu idea</label><textarea id="assistantInput" rows="4" placeholder="Quiero una hoodie amplia..."></textarea><button class="btn primary" onclick="organizeIdea()">Organizar idea</button><p id="assistantOutput"></p></div>
+</section>
+
+<section class="page" id="page-inspiracion">
+<h1>Inspiración</h1><p>Guardá ideas y referencias.</p>
+<div class="form"><label>Nueva referencia</label><textarea id="inspoInput" rows="3" placeholder="Anotá una idea..."></textarea><button class="btn primary" onclick="addInspo()">Guardar</button></div><div class="cards" id="inspoList"></div>
+</section>
+
+<section class="page" id="page-ideas">
+<h1>Generador de ideas</h1><p>Generador local de conceptos. No utiliza IA ni servicios pagos.</p>
+<div class="form"><button class="btn primary" onclick="randomIdea()">Generar idea</button><p id="randomIdea"></p><label>Tu propio concepto</label><textarea id="prompt" rows="4" placeholder="Describí tu diseño..."></textarea><button class="btn" onclick="prepareIdea()">Preparar concepto</button><p id="promptOutput"></p></div>
+</section>
+
+<section class="page" id="page-cuenta">
+<h1>Mi cuenta</h1><p>Perfil local de tu estudio.</p>
+<div class="form"><label>Nombre de tu espacio</label><input id="profile" placeholder="Mi estudio"><button class="btn primary" onclick="saveProfile()">Guardar</button></div>
+</section>
+
+<section class="page" id="page-config">
+<h1>Configuración</h1><p>Respaldo de tus proyectos.</p>
+<div class="form"><button class="btn primary" onclick="backup()">Descargar copia de seguridad</button><label>Restaurar copia de seguridad</label><input type="file" id="restore" accept=".json,application/json"><p>Los datos se guardan en este navegador. Descargá una copia si querés conservarlos al cambiar de dispositivo.</p></div>
+</section>
+</main>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let selected=null,history=[],angle=0,drawingMode=false,pen=false,ctx=null;
+const canvas=$('canvas'),shirt=$('shirt'),wrap=$('shirtWrap');
+
+function go(name){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ $('page-'+name).classList.add('active');
+ document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+ $('breadcrumb').textContent='ASHM. / '+name.toUpperCase();
+ if(name==='mis-disenos')renderSaved();
+ if(name==='colecciones')renderCollections();
+ if(name==='inspiracion')renderInspo();
+}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+
+function snapshot(){history.push(canvas.innerHTML);if(history.length>15)history.shift()}
+function undo(){if(!history.length)return;canvas.innerHTML=history.pop();selected=null;wire();renderLayers()}
+function select(el){
+ document.querySelectorAll('.design').forEach(x=>x.classList.remove('selected'));
+ selected=el;if(el)el.classList.add('selected');renderLayers();
+}
+function wire(){
+ document.querySelectorAll('.design').forEach(el=>{
+  let sx,sy,left,top;
+  el.onpointerdown=e=>{
+   e.stopPropagation();select(el);
+   let r=el.getBoundingClientRect(),c=canvas.getBoundingClientRect();
+   sx=e.clientX;sy=e.clientY;left=r.left-c.left;top=r.top-c.top;
+   el.setPointerCapture(e.pointerId);
+  };
+  el.onpointermove=e=>{
+   if(!el.hasPointerCapture(e.pointerId))return;
+   let c=canvas.getBoundingClientRect();
+   el.style.left=((left+e.clientX-sx)/c.width*100)+'%';
+   el.style.top=((top+e.clientY-sy)/c.height*100)+'%';
+  };
+ });
+}
+function addText(){
+ let value=$('textValue').value.trim()||'TU DISEÑO';
+ snapshot();
+ let el=document.createElement('div');el.className='design';el.textContent=value;
+ el.style.fontFamily=$('font').value;el.style.color=$('ink').value;
+ el.style.fontSize=$('size').value+'px';
+ canvas.append(el);wire();select(el);
+}
+function addShape(){
+ snapshot();let el=document.createElement('div');el.className='design';
+ el.textContent='✦';el.style.fontSize='55px';el.style.color=$('ink').value;
+ canvas.append(el);wire();select(el);
+}
+function deleteSelected(){if(!selected)return;snapshot();selected.remove();selected=null;renderLayers()}
+function renderLayers(){
+ let items=[...canvas.querySelectorAll('.design')];
+ $('layers').innerHTML=items.length?items.map((x,i)=>`<div class="layer ${x===selected?'active':''}" onclick="select(document.querySelectorAll('.design')[${i}])">Capa ${i+1}: ${escapeHTML(x.textContent.slice(0,18)||'Imagen')}</div>`).join(''):'Sin elementos';
+}
+function layerMove(direction){
+ if(!selected)return;
+ let items=[...canvas.querySelectorAll('.design')],i=items.indexOf(selected),j=i+direction;
+ if(j<0||j>=items.length)return;
+ snapshot();
+ if(direction<0)selected.parentNode.insertBefore(selected,items[j]);
+ else selected.parentNode.insertBefore(items[j],selected);
+ renderLayers();
+}
+$('upload').onchange=e=>{
+ let file=e.target.files[0];if(!file)return;
+ let reader=new FileReader();
+ reader.onload=()=>{
+  snapshot();let el=document.createElement('div');el.className='design';
+  let img=document.createElement('img');img.src=reader.result;el.append(img);
+  canvas.append(el);wire();select(el);
+ };
+ reader.readAsDataURL(file);e.target.value='';
+};
+$('shirtColor').oninput=e=>document.documentElement.style.setProperty('--shirt',e.target.value);
+$('ink').oninput=e=>{if(selected)selected.style.color=e.target.value};
+$('size').oninput=e=>{if(selected)selected.style.fontSize=e.target.value+'px'};
+
+function turn(degrees){
+ angle+=degrees;shirt.style.transform=`rotateY(${angle}deg)`;
+ $('viewLabel').textContent=(Math.abs(angle%360)<90||Math.abs(angle%360)>270?'Frente':'Espalda');
+}
+let rotating=false,lastX=0;
+wrap.onpointerdown=e=>{rotating=true;lastX=e.clientX;wrap.setPointerCapture(e.pointerId)};
+wrap.onpointermove=e=>{if(!rotating)return;let dx=e.clientX-lastX;lastX=e.clientX;turn(dx*.8)};
+wrap.onpointerup=()=>rotating=false;
+wrap.onpointercancel=()=>rotating=false;
+
+function toggleDraw(){
+ drawingMode=!drawingMode;
+ $('drawButton').style.color=drawingMode?'#91b3e6':'#c7d5e8';
+ let c=$('drawing');
+ c.style.pointerEvents=drawingMode?'auto':'none';
+ c.style.cursor='crosshair';
+ c.width=c.clientWidth*devicePixelRatio;c.height=c.clientHeight*devicePixelRatio;
+ ctx=c.getContext('2d');ctx.scale(devicePixelRatio,devicePixelRatio);
+ ctx.strokeStyle=$('ink').value;ctx.lineWidth=3;ctx.lineCap='round';
+}
+$('drawing').onpointerdown=e=>{
+ if(!drawingMode)return;pen=true;
+ let r=e.target.getBoundingClientRect();ctx.beginPath();ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+};
+$('drawing').onpointermove=e=>{
+ if(!pen||!drawingMode)return;
+ let r=e.target.getBoundingClientRect();ctx.lineTo(e.clientX-r.left,e.clientY-r.top);ctx.stroke();
+};
+$('drawing').onpointerup=()=>pen=false;
+$('drawing').onpointerleave=()=>pen=false;
+
+function saveDesign(){
+ let designs=JSON.parse(localStorage.getItem('ashm-designs')||'[]');
+ designs.unshift({
+  name:'Diseño '+new Date().toLocaleString(),
+  markup:canvas.innerHTML,
+  color:getComputedStyle(document.documentElement).getPropertyValue('--shirt').trim(),
+  angle
+ });
+ try{localStorage.setItem('ashm-designs',JSON.stringify(designs.slice(0,25)));alert('Diseño guardado en este navegador.');}
+ catch(e){alert('No hay espacio suficiente. Descargá una copia de seguridad.');}
+}
+function renderSaved(){
+ let a=JSON.parse(localStorage.getItem('ashm-designs')||'[]');
+ $('saved').innerHTML=a.length?a.map((d,i)=>`<div class="card"><div class="thumb">👕</div><h3>${escapeHTML(d.name)}</h3><p>Guardado localmente</p><button class="btn" onclick="openSaved(${i})">Abrir</button> <button class="btn" onclick="removeSaved(${i})">Borrar</button></div>`).join(''):'<div class="empty">Todavía no guardaste diseños.</div>';
+}
+function openSaved(i){
+ let d=JSON.parse(localStorage.getItem('ashm-designs')||'[]')[i];
+ canvas.innerHTML=d.markup;angle=d.angle||0;shirt.style.transform=`rotateY(${angle}deg)`;
+ document.documentElement.style.setProperty('--shirt',d.color||'#f4f4f4');
+ selected=null;wire();renderLayers();go('disenar');
+}
+function removeSaved(i){
+ let a=JSON.parse(localStorage.getItem('ashm-designs')||'[]');a.splice(i,1);
+ localStorage.setItem('ashm-designs',JSON.stringify(a));renderSaved();
+}
+function saveBrand(){
+ localStorage.setItem('ashm-brand',JSON.stringify({name:$('brandName').value,description:$('brandDesc').value}));
+ $('brandStatus').textContent='Identidad guardada.';
+}
+function addCollection(){
+ let v=$('collectionName').value.trim();if(!v)return;
+ let a=JSON.parse(localStorage.getItem('ashm-collections')||'[]');a.push(v);
+ localStorage.setItem('ashm-collections',JSON.stringify(a));$('collectionName').value='';renderCollections();
+}
+function renderCollections(){
+ let a=JSON.parse(localStorage.getItem('ashm-collections')||'[]');
+ $('collections').innerHTML=a.length?a.map(v=>`<div class="card"><div class="thumb">▧</div><h3>${escapeHTML(v)}</h3><p>Colección personal</p></div>`).join(''):'<div class="empty">Todavía no creaste colecciones.</div>';
+}
+function organizeIdea(){
+ let v=$('assistantInput').value.trim();
+ $('assistantOutput').textContent=v?'Tu idea: '+v+'. Definí la prenda, el corte, los colores, el gráfico y dónde ubicarlo.':'Escribí tu idea primero.';
+}
+function addInspo(){
+ let v=$('inspoInput').value.trim();if(!v)return;
+ let a=JSON.parse(localStorage.getItem('ashm-inspo')||'[]');a.unshift(v);
+ localStorage.setItem('ashm-inspo',JSON.stringify(a));$('inspoInput').value='';renderInspo();
+}
+function renderInspo(){
+ let a=JSON.parse(localStorage.getItem('ashm-inspo')||'[]');
+ $('inspoList').innerHTML=a.length?a.map(v=>`<div class="card"><p>${escapeHTML(v)}</p></div>`).join(''):'<div class="empty">Tus referencias aparecerán acá.</div>';
+}
+const ideas=[
+ 'Una hoodie oversized azul oscuro con gráficos tipográficos minimalistas.',
+ 'Una camiseta blanca con un estampado abstracto en la espalda.',
+ 'Un pantalón cargo negro con detalles geométricos.',
+ 'Una campera urbana con una paleta de grises y azul.',
+ 'Una remera amplia con un símbolo pequeño en el pecho.'
+];
+function randomIdea(){$('randomIdea').textContent=ideas[Math.floor(Math.random()*ideas.length)]}
+function prepareIdea(){
+ let v=$('prompt').value.trim();$('promptOutput').textContent=v?'Concepto preparado: '+v:'Escribí tu concepto primero.';
+}
+function saveProfile(){
+ let v=$('profile').value.trim()||'Mi estudio';
+ localStorage.setItem('ashm-profile',v);alert('Perfil guardado.');
+}
+function backup(){
+ let keys=['ashm-designs','ashm-brand','ashm-collections','ashm-inspo','ashm-profile'];
+ let data={};keys.forEach(k=>data[k]=localStorage.getItem(k));
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ let url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='ashm-respaldo.json';a.click();URL.revokeObjectURL(url);
+}
+$('restore').onchange=e=>{
+ let file=e.target.files[0];if(!file)return;
+ let reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   let data=JSON.parse(reader.result);
+   Object.entries(data).forEach(([k,v])=>{if(k.startsWith('ashm-')&&v!==null)localStorage.setItem(k,v)});
+   alert('Respaldo restaurado. Recargá la página.');
+  }catch(err){alert('El archivo no es un respaldo válido.');}
+ };
+ reader.readAsText(file);
+};
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>
