@@ -4,441 +4,675 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASHM. | Creative Studio</title>
+<title>ASHM. | Crea tu propio estilo</title>
 <style>
-:root{--bg:#0b1120;--panel:#142239;--line:#293c58;--text:#edf3ff;--muted:#9aabc3;--blue:#557eb8;--shirt:#f4f4f4}
+:root{
+ --bg:#080b12;--panel:#101622;--panel2:#151e2c;
+ --line:#273246;--text:#f3f5fa;--muted:#8792a5;
+ --blue:#7195e8;--white:#f7f7f5;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button,input,textarea,select{font:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,select{font:inherit}
 button{cursor:pointer}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:220px;background:#0e1727;border-right:1px solid var(--line);padding:18px 10px;flex-shrink:0}
-.logo{font-size:29px;font-weight:900;letter-spacing:3px;padding:8px 12px 25px}
-.logo span{color:#91b3e6}
-.section{font-size:10px;color:#7187a7;letter-spacing:2px;padding:14px 12px 6px}
-nav button{display:block;width:100%;padding:11px 12px;border:0;border-radius:8px;background:none;color:#c5d3e6;text-align:left;margin:2px 0}
-nav button:hover,nav button.active{background:#223854;color:white}
-.main{flex:1;min-width:0}
-.top{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;color:var(--muted);font-size:12px}
-.page{display:none;padding:30px;max-width:1250px;margin:auto}
+.app{min-height:100vh}
+.sidebar{
+ position:fixed;inset:0 auto 0 0;width:235px;background:#0c111b;
+ border-right:1px solid var(--line);padding:25px 15px;overflow:auto;z-index:5
+}
+.logo{font-size:30px;font-weight:900;letter-spacing:5px;padding:4px 12px}
+.logo span{color:var(--blue)}
+.tagline{font-size:9px;letter-spacing:2px;color:var(--muted);padding:8px 12px 27px}
+.nav-label{font-size:9px;color:#657187;letter-spacing:2px;padding:12px}
+.nav button{
+ display:flex;align-items:center;gap:12px;width:100%;border:0;
+ background:transparent;color:#aab4c5;padding:12px;border-radius:9px;
+ text-align:left;margin:3px 0;font-size:13px
+}
+.nav button:hover,.nav button.active{background:#1b273a;color:white}
+.nav button.active{border-left:3px solid var(--blue)}
+.nav-icon{width:19px;text-align:center;color:var(--blue)}
+.sidebar-bottom{margin:25px 12px;color:#66748a;font-size:10px;line-height:1.7}
+.main{margin-left:235px;min-height:100vh}
+.topbar{height:65px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px}
+.topbar small{color:var(--muted);letter-spacing:2px;font-size:10px}
+.status{font-size:10px;color:#91b6ff;border:1px solid #344765;padding:8px 12px;border-radius:30px}
+.page{display:none;padding:30px;max-width:1500px;margin:auto}
 .page.active{display:block}
-h1{font-size:32px;margin:0 0 10px}
+.eyebrow{font-size:10px;letter-spacing:3px;color:var(--blue);font-weight:bold}
+h1{font-size:clamp(32px,5vw,65px);letter-spacing:-2px;margin:12px 0}
+h2{font-size:25px;margin:0 0 12px}
 p{color:var(--muted);line-height:1.6}
-.eyebrow{font-size:11px;letter-spacing:2px;color:#9bb9e8}
-.btn{background:#1c2d46;border:1px solid #405775;color:white;padding:10px 14px;border-radius:8px}
-.primary{background:#355d96;border-color:#557eb8}
-.hero{min-height:calc(100vh - 58px);display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center;padding:30px 5%}
-.hero h1{font-size:clamp(42px,6vw,76px);line-height:.98;letter-spacing:-3px;margin:20px 0}
-.hero h1 span{color:#91b3e6}
-.hero p{max-width:430px}
-.feature{background:linear-gradient(145deg,#1b304e,#101a2b);border:1px solid var(--line);border-radius:18px;padding:24px;min-height:350px;display:flex;flex-direction:column;justify-content:space-between}
-.feature-art{height:230px;display:grid;place-items:center;font-size:110px;background:radial-gradient(ellipse,#526c90,#16243a 70%);border-radius:12px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:15px;margin-top:20px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
-.thumb{height:110px;background:linear-gradient(145deg,#2b4568,#111d30);border-radius:9px;display:grid;place-items:center;font-size:42px}
-.card h3{margin-bottom:5px}
-.card p{font-size:12px}
-.editor{display:flex;height:calc(100vh - 58px);min-height:550px;margin:-30px}
-.tools,.properties{background:#101b2d;padding:13px;width:175px;overflow:auto;flex-shrink:0}
-.tools{border-right:1px solid var(--line)}
-.properties{border-left:1px solid var(--line)}
-.tools h4,.properties h4{font-size:10px;letter-spacing:1.5px;color:#8da7cc}
-.tools button{display:block;width:100%;text-align:left;background:none;border:0;color:#c7d5e8;padding:10px 6px;border-radius:7px;font-size:12px}
-.tools button:hover{background:#263d5d}
-.workspace{flex:1;min-width:0;background:#e9edf3;color:#28374d;padding:15px;display:flex;flex-direction:column}
-.workhead{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:10px}
-.canvas{position:relative;flex:1;min-height:350px;background:linear-gradient(140deg,#fff,#e6ebf2);border-radius:10px;overflow:hidden;display:grid;place-items:center;touch-action:none}
-.shirt-wrap{height:82%;width:min(60%,360px);display:grid;place-items:center;perspective:900px;cursor:grab}
-.shirt{width:100%;height:100%;position:relative;transform-style:preserve-3d;filter:drop-shadow(0 14px 12px #26364a30)}
-.shirt svg{position:absolute;width:100%;height:100%;inset:0;backface-visibility:hidden}
-.shirt .back{transform:rotateY(180deg)}
-.shirt-shape{fill:var(--shirt);stroke:#c6ced9;stroke-width:2}
-.design{position:absolute;z-index:3;left:50%;top:43%;transform:translate(-50%,-50%);cursor:move;white-space:nowrap;font-weight:bold;user-select:none}
-.design.selected{outline:1px dashed #4778bc;outline-offset:5px}
-.design img{max-width:130px;max-height:130px;display:block;pointer-events:none}
-.properties label,.form label{display:block;font-size:11px;color:#bdcce0;margin:14px 0 6px}
-.properties input,.properties select,.form input,.form textarea{width:100%;padding:9px;border:1px solid #405573;background:#1b2b43;color:white;border-radius:7px}
-.properties input[type=color]{height:38px;padding:3px}
-.layers{font-size:11px}
-.layer{padding:8px;border-bottom:1px solid #2a3c56;cursor:pointer}
-.layer.active{background:#294365}
-.form{max-width:520px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
-.form input,.form textarea{margin-bottom:12px}
-.empty{padding:25px;border:1px dashed #405573;border-radius:10px;color:var(--muted);text-align:center}
-@media(max-width:850px){.sidebar{width:175px}.tools{width:130px}.properties{width:155px}}
-@media(max-width:650px){.sidebar{width:58px;padding:8px 4px}.logo{font-size:16px;padding:10px 4px}.section{display:none}nav button{font-size:0;text-align:center;padding:13px 2px}.properties{display:none}.hero{grid-template-columns:1fr;padding:25px}.page{padding:18px}.editor{margin:-18px}.tools{width:112px;padding:8px 5px}.tools button{font-size:10px;padding:9px 3px}}
+.hero{
+ min-height:390px;border:1px solid var(--line);border-radius:18px;
+ background:radial-gradient(ellipse at 78% 35%,#243c68 0,#111d31 34%,#0d1420 70%);
+ display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden
+}
+.hero-copy{padding:55px 45px;align-self:center}
+.hero-copy p{max-width:440px}
+.hero-art{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-art:before{content:"";position:absolute;width:310px;height:310px;border:1px solid #49618b;border-radius:50%;box-shadow:0 0 0 35px #ffffff05,0 0 0 70px #ffffff04}
+.hero-art strong{font-size:clamp(45px,8vw,105px);font-weight:900;letter-spacing:-7px;transform:rotate(-9deg);text-shadow:8px 12px 0 #0007;z-index:1}
+.hero-art span{position:absolute;bottom:30px;right:30px;font-size:9px;letter-spacing:3px;color:#c4d3f2}
+.btn{border:1px solid #526b96;background:var(--blue);color:#07101e;padding:13px 19px;border-radius:7px;font-weight:bold;font-size:12px}
+.btn:hover{filter:brightness(1.12)}
+.btn.secondary{background:transparent;color:#e8edf8;border-color:var(--line)}
+.btn.danger{background:#321d28;color:#ffc2ce;border-color:#59303d}
+.btn.small{padding:9px 12px;font-size:11px}
+.home-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:20px}
+.feature,.info-card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+.feature{min-height:180px}
+.feature .big{font-size:34px;font-weight:900;letter-spacing:-2px;margin:16px 0}
+.feature p{font-size:12px}
+.feature.blue{background:linear-gradient(130deg,#192b49,#101622 75%)}
+.editor-layout{display:grid;grid-template-columns:190px minmax(300px,1fr) 235px;gap:14px;margin-top:20px}
+.tools,.properties{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px}
+.tool-title{font-size:10px;letter-spacing:2px;color:var(--muted);margin:5px 0 13px}
+.tool{width:100%;background:#151e2c;border:1px solid transparent;color:#d8deea;text-align:left;padding:11px;border-radius:7px;margin:4px 0;font-size:12px}
+.tool:hover,.tool.selected{border-color:#617fb5;background:#1b2b43}
+.stage-wrap{background:#e9e9e6;border-radius:12px;min-height:590px;padding:15px;display:flex;flex-direction:column}
+.stage-head{display:flex;justify-content:space-between;align-items:center;color:#303743;font-size:11px;padding:3px 5px 12px}
+.stage{flex:1;min-height:510px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+#shirtSvg{width:min(100%,470px);height:auto;max-height:520px;overflow:visible;filter:drop-shadow(0 18px 17px #0003)}
+#garment{transform-origin:300px 280px;transition:transform .15s}
+#designLayer{cursor:move}
+.design-item{cursor:move}
+.design-item.selected{filter:drop-shadow(0 0 3px #477bd8)}
+.stage-foot{font-size:10px;color:#66707e;text-align:center;padding-top:9px}
+.control{margin:17px 0}
+.control label{display:flex;justify-content:space-between;color:#c5cede;font-size:11px;margin-bottom:9px}
+.control output{color:#91b5ff}
+input[type=range]{width:100%;accent-color:var(--blue)}
+input[type=text],select{
+ width:100%;background:#0b111b;border:1px solid var(--line);color:white;
+ padding:10px;border-radius:7px;outline:none
+}
+input[type=color]{width:100%;height:38px;border:0;background:transparent}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.layer{padding:9px;background:#151e2c;border-radius:6px;font-size:11px;margin:5px 0;display:flex;justify-content:space-between;cursor:pointer}
+.layer.active{outline:1px solid var(--blue)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:22px}
+.design-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px}
+.design-thumb{height:130px;background:#e7e8e5;border-radius:8px;display:grid;place-items:center;color:#172235;font-size:28px;font-weight:900}
+.design-card h3{font-size:14px}
+.design-card p{font-size:11px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.empty{padding:35px;text-align:center;border:1px dashed #344057;border-radius:12px;color:var(--muted)}
+.notice{font-size:10px;color:#8c9ab0;line-height:1.6}
+.mobile-menu{display:none}
+@media(max-width:1050px){
+ .editor-layout{grid-template-columns:160px minmax(250px,1fr)}
+ .properties{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+}
+@media(max-width:700px){
+ .sidebar{width:65px;padding:15px 7px}
+ .logo{font-size:17px;padding:5px}.logo span{display:none}
+ .tagline,.nav-label,.nav button .nav-text,.sidebar-bottom{display:none}
+ .nav button{justify-content:center;padding:13px 5px}
+ .nav-icon{font-size:17px}
+ .main{margin-left:65px}
+ .page{padding:17px}
+ .topbar{padding:0 16px}
+ .hero{grid-template-columns:1fr}
+ .hero-copy{padding:30px 25px}
+ .hero-art{min-height:160px}
+ .home-grid{grid-template-columns:1fr}
+ .editor-layout{grid-template-columns:1fr}
+ .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+ .tool-title{grid-column:1/-1}
+ .stage-wrap{min-height:440px}
+ .stage{min-height:360px}
+ .properties{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<div class="layout">
+<div class="app">
 <aside class="sidebar">
-<div class="logo">ASHM<span>.</span></div>
-<nav>
-<div class="section">ESTUDIO</div>
-<button class="active" data-page="inicio">⌂　Inicio</button>
-<button data-page="disenar">✳　Diseñar ropa</button>
-<button data-page="mis-disenos">▧　Mis diseños</button>
-<div class="section">CREATIVIDAD</div>
-<button data-page="outfits">◈　Crear outfits</button>
-<button data-page="marca">✦　Mi marca</button>
-<button data-page="estampados">▤　Estampados</button>
-<button data-page="escuela">▣　Escuela de diseño</button>
-<button data-page="vista">◇　Vista 360°</button>
-<button data-page="colecciones">▧　Mis colecciones</button>
-<button data-page="asistente">☏　Asistente</button>
-<button data-page="inspiracion">⌕　Inspiración</button>
-<button data-page="ideas">✧　Generador de ideas</button>
-<div class="section">CUENTA</div>
-<button data-page="cuenta">♙　Mi cuenta</button>
-<button data-page="config">⚙　Configuración</button>
-</nav>
+ <div class="logo">ASHM<span>.</span></div>
+ <div class="tagline">CREA TU PROPIO ESTILO. SE VOS.</div>
+ <div class="nav-label">WORKSPACE</div>
+ <nav class="nav">
+  <button class="active" data-page="home"><span class="nav-icon">⌂</span><span class="nav-text">Inicio</span></button>
+  <button data-page="editor"><span class="nav-icon">✎</span><span class="nav-text">Diseñar ropa</span></button>
+  <button data-page="designs"><span class="nav-icon">▤</span><span class="nav-text">Mis diseños</span></button>
+  <button data-page="outfits"><span class="nav-icon">◈</span><span class="nav-text">Crear outfits</span></button>
+  <button data-page="brand"><span class="nav-icon">▣</span><span class="nav-text">Mi marca</span></button>
+  <button data-page="prints"><span class="nav-icon">✳</span><span class="nav-text">Estampados</span></button>
+  <button data-page="school"><span class="nav-icon">⌑</span><span class="nav-text">Escuela de diseño</span></button>
+  <button data-page="view"><span class="nav-icon">⟳</span><span class="nav-text">Vista de prenda</span></button>
+  <button data-page="collections"><span class="nav-icon">▦</span><span class="nav-text">Mis colecciones</span></button>
+  <button data-page="assistant"><span class="nav-icon">✧</span><span class="nav-text">Asistente de diseño</span></button>
+  <button data-page="inspiration"><span class="nav-icon">◎</span><span class="nav-text">Inspiración</span></button>
+  <button data-page="ideas"><span class="nav-icon">✦</span><span class="nav-text">Generador de ideas</span></button>
+  <button data-page="settings"><span class="nav-icon">⚙</span><span class="nav-text">Configuración</span></button>
+ </nav>
+ <div class="sidebar-bottom">ASHM. STUDIO<br>YOUR STYLE. YOUR RULES.</div>
 </aside>
 
 <main class="main">
-<header class="top">
-<span id="breadcrumb">ASHM. / INICIO</span>
-<span>ESTUDIO PERSONAL　<button class="btn primary" onclick="saveDesign()">Guardar diseño</button></span>
-</header>
+ <header class="topbar"><small>PERSONAL DESIGN STUDIO / <span id="currentSection">INICIO</span></small><span class="status">● LOCAL WORKSPACE</span></header>
 
-<section class="page active" id="page-inicio">
-<div class="hero">
-<div>
-<div class="eyebrow">TU ESTUDIO. TUS REGLAS.</div>
-<h1>CREA TU<br>PROPIO ESTILO.<br><span>SE VOS.</span></h1>
-<p>No sigas tendencias. Creá las tuyas. Diseñá prendas, inventá estampados y armá tu propia colección.</p>
-<button class="btn primary" onclick="go('disenar')">＋ Comenzar a diseñar</button>
-</div>
-<div class="feature">
-<div class="feature-art">✦</div>
-<div><div class="eyebrow">ASHM. CREATIVE STUDIO</div><h2>Tu próxima idea empieza acá.</h2><p>Un espacio personal para experimentar, probar y crear.</p></div>
-</div>
-</div>
-</section>
+ <section class="page active" id="home">
+  <div class="hero">
+   <div class="hero-copy">
+    <div class="eyebrow">TU ESPACIO CREATIVO</div>
+    <h1>NO SIGAS<br>TENDENCIAS.<br><span style="color:#91b5ff">CREÁ LAS TUYAS.</span></h1>
+    <p>Diseñá prendas, experimentá con estampados y construí una identidad que sea realmente tuya.</p>
+    <button class="btn" onclick="go('editor')">COMENZAR A DISEÑAR ↗</button>
+   </div>
+   <div class="hero-art">
+    <strong>ASHM.</strong><span>CREATIVITY HAS NO RULES</span>
+   </div>
+  </div>
+  <div class="home-grid">
+   <div class="feature blue">
+    <div class="eyebrow">ARTISTA DESTACADO / INSPIRACIÓN</div>
+    <div class="big">TRUENO<span style="color:#91b5ff">.</span></div>
+    <p>Actitud, identidad y estética urbana. Una referencia para explorar siluetas, tipografías y combinaciones con personalidad.</p>
+    <button class="btn secondary small" onclick="go('inspiration')">EXPLORAR INSPIRACIÓN</button>
+   </div>
+   <div class="feature">
+    <div class="eyebrow">TU PROGRESO</div>
+    <div class="big" id="homeCount">00 DISEÑOS</div>
+    <p>Tu espacio de trabajo, tus ideas y tus creaciones guardadas.</p>
+    <button class="btn secondary small" onclick="go('designs')">VER MIS DISEÑOS</button>
+   </div>
+  </div>
+ </section>
 
-<section class="page" id="page-disenar">
-<div class="editor">
-<aside class="tools">
-<h4>HERRAMIENTAS</h4>
-<button onclick="addText()">T　Agregar texto</button>
-<button onclick="document.getElementById('upload').click()">▧　Subir imagen</button>
-<input type="file" id="upload" accept="image/*" hidden>
-<button onclick="toggleDraw()" id="drawButton">✎　Dibujar</button>
-<button onclick="addShape()">◇　Agregar símbolo</button>
-<button onclick="undo()">↶　Deshacer</button>
-<button onclick="deleteSelected()">⌫　Eliminar</button>
-<button onclick="turn(-45)">↶　Girar izquierda</button>
-<button onclick="turn(45)">↻　Girar derecha</button>
-</aside>
+ <section class="page" id="editor">
+  <div class="eyebrow">ASHM. / EDITOR</div>
+  <h1>DISEÑÁ TU PRENDA.</h1>
+  <p>Elegí una prenda, personalizá sus colores y ubicá tus diseños sobre ella.</p>
+  <div class="editor-layout">
+   <div class="tools">
+    <div class="tool-title">HERRAMIENTAS</div>
+    <button class="tool selected" onclick="setGarment('shirt',this)">▱ Camiseta</button>
+    <button class="tool" onclick="setGarment('hoodie',this)">▱ Hoodie</button>
+    <button class="tool" onclick="setGarment('sweatshirt',this)">▱ Buzo</button>
+    <button class="tool" onclick="addText()">T Añadir texto</button>
+    <button class="tool" onclick="addShape('star')">✦ Añadir estrella</button>
+    <button class="tool" onclick="addShape('circle')">● Añadir círculo</button>
+    <button class="tool" onclick="document.getElementById('imageUpload').click()">▧ Subir imagen</button>
+    <input id="imageUpload" type="file" accept="image/*" hidden onchange="addImage(event)">
+    <button class="tool" onclick="deleteSelected()">⌫ Eliminar elemento</button>
+    <button class="tool" onclick="turnGarment()">⟳ Frente / espalda</button>
+    <button class="tool" onclick="clearDesign()">↺ Limpiar diseño</button>
+   </div>
 
-<section class="workspace">
-<div class="workhead"><b>ÁREA DE DISEÑO</b><span id="viewLabel">Frente</span></div>
-<div class="canvas" id="canvas">
-<div class="shirt-wrap" id="shirtWrap">
-<div class="shirt" id="shirt">
-<svg viewBox="0 0 400 440">
-<path class="shirt-shape" d="M130 35 L175 20 Q200 48 225 20 L270 35 L365 100 L320 175 L275 145 L275 415 L125 415 L125 145 L80 175 L35 100 Z"/>
-<path d="M175 20 Q200 85 225 20" fill="none" stroke="#c6ced9" stroke-width="2"/>
-</svg>
-<svg class="back" viewBox="0 0 400 440">
-<path class="shirt-shape" d="M130 35 L175 20 Q200 48 225 20 L270 35 L365 100 L320 175 L275 145 L275 415 L125 415 L125 145 L80 175 L35 100 Z"/>
-<path d="M175 20 Q200 85 225 20" fill="none" stroke="#c6ced9" stroke-width="2"/>
-</svg>
-</div>
-</div>
-<canvas id="drawing" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
-</div>
-<div class="workhead"><span>Arrastrá los elementos para moverlos.</span><span>ASHM. STUDIO</span></div>
-</section>
+   <div class="stage-wrap">
+    <div class="stage-head"><strong id="garmentName">CAMISETA / FRENTE</strong><span>ÁREA DE DISEÑO</span></div>
+    <div class="stage">
+     <svg id="shirtSvg" viewBox="0 0 600 560" role="img" aria-label="Vista de prenda editable">
+      <defs>
+       <linearGradient id="fabric" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff"/>
+        <stop offset=".42" stop-color="#e5e7e7"/>
+        <stop offset=".75" stop-color="#c8ccce"/>
+        <stop offset="1" stop-color="#f4f4f1"/>
+       </linearGradient>
+       <linearGradient id="shade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#777e86" stop-opacity=".28"/>
+        <stop offset=".25" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset=".7" stop-color="#fff" stop-opacity=".18"/>
+        <stop offset="1" stop-color="#69717a" stop-opacity=".3"/>
+       </linearGradient>
+       <linearGradient id="sleeve" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f7f7f4"/>
+        <stop offset="1" stop-color="#bfc4c8"/>
+       </linearGradient>
+      </defs>
+      <g id="garment">
+       <g id="garmentShape">
+        <path id="bodyPath" d="M220 95 L260 78 Q300 125 340 78 L380 95 L460 135 L520 255 L450 285 L420 225 L410 475 Q300 500 190 475 L180 225 L150 285 L80 255 L140 135 Z" fill="url(#fabric)" stroke="#aeb4b9" stroke-width="2"/>
+        <path d="M220 95 L260 78 Q300 125 340 78 L380 95 L460 135 L520 255 L450 285 L420 225 L410 475 Q300 500 190 475 L180 225 L150 285 L80 255 L140 135 Z" fill="url(#shade)"/>
+        <path d="M260 79 Q300 142 340 79" fill="none" stroke="#a2a8ad" stroke-width="5"/>
+        <path d="M265 83 Q300 133 335 83" fill="none" stroke="#f8f8f5" stroke-width="2"/>
+        <path d="M190 475 Q300 490 410 475" fill="none" stroke="#9da4aa" stroke-width="2"/>
+        <path d="M140 135 L180 225 M460 135 L420 225" fill="none" stroke="#a7adb2" stroke-width="2"/>
+        <path d="M200 125 L195 450 M400 125 L405 450" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2"/>
+        <path d="M145 145 L105 250 M455 145 L495 250" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="3"/>
+        <g id="backLabel" style="display:none">
+         <text x="300" y="220" text-anchor="middle" font-size="17" fill="#8a929a" letter-spacing="4">ASHM. STUDIO</text>
+         <path d="M245 235 H355" stroke="#aab0b5"/>
+        </g>
+       </g>
+       <g id="designLayer"></g>
+      </g>
+     </svg>
+    </div>
+    <div class="stage-foot">Arrastrá los elementos para ubicarlos. El diseño se guarda en este dispositivo.</div>
+   </div>
 
-<aside class="properties">
-<h4>PROPIEDADES</h4>
-<label>Color de prenda</label><input type="color" id="shirtColor" value="#f4f4f4">
-<label>Texto</label><input id="textValue" placeholder="Tu diseño">
-<button class="btn primary" style="width:100%;margin-top:8px" onclick="addText()">Agregar</button>
-<label>Fuente</label>
-<select id="font"><option>Arial</option><option>Georgia</option><option>Impact</option><option>Courier New</option><option>Trebuchet MS</option></select>
-<label>Color del elemento</label><input type="color" id="ink" value="#111111">
-<label>Tamaño</label><input type="range" id="size" min="12" max="72" value="28">
-<label>Capas</label><div id="layers" class="layers">Sin elementos</div>
-<button class="btn" onclick="layerMove(-1)">Subir capa</button>
-<button class="btn" onclick="layerMove(1)">Bajar capa</button>
-</aside>
-</div>
-</section>
+   <div class="properties">
+    <div>
+     <div class="tool-title">PRENDA</div>
+     <div class="control"><label>Color de tela</label><input type="color" id="fabricColor" value="#e5e7e7" oninput="changeFabric(this.value)"></div>
+     <div class="control"><label>Tamaño de prenda <output id="garmentSizeValue">100%</output></label><input type="range" min="65" max="125" value="100" oninput="scaleGarment(this.value)"></div>
+    </div>
+    <div>
+     <div class="tool-title">ELEMENTO SELECCIONADO</div>
+     <div class="control"><label>Texto</label><input type="text" id="elementText" placeholder="Seleccioná un texto" oninput="editText(this.value)"></div>
+     <div class="control"><label>Color del diseño</label><input type="color" id="elementColor" value="#17243b" oninput="changeElementColor(this.value)"></div>
+     <div class="control"><label>Tamaño <output id="elementSizeValue">100%</output></label><input id="elementSize" type="range" min="20" max="250" value="100" oninput="scaleElement(this.value)"></div>
+     <div class="control"><label>Rotación <output id="rotationValue">0°</output></label><input id="elementRotation" type="range" min="-180" max="180" value="0" oninput="rotateElement(this.value)"></div>
+    </div>
+    <div>
+     <div class="tool-title">CAPAS</div>
+     <div id="layers"><div class="notice">Todavía no hay elementos.</div></div>
+     <div class="divider"></div>
+     <button class="btn secondary small" onclick="moveLayer(-1)">↑ Subir capa</button>
+     <button class="btn secondary small" onclick="moveLayer(1)">↓ Bajar capa</button>
+     <div class="divider"></div>
+     <button class="btn" style="width:100%" onclick="saveDesign()">GUARDAR DISEÑO</button>
+     <button class="btn secondary small" style="width:100%;margin-top:8px" onclick="exportPNG()">EXPORTAR PNG</button>
+    </div>
+   </div>
+  </div>
+ </section>
 
-<section class="page" id="page-mis-disenos">
-<h1>Mis diseños</h1><p>Proyectos guardados en este navegador.</p><div class="cards" id="saved"></div>
-</section>
+ <section class="page" id="designs">
+  <div class="eyebrow">TU ARCHIVO CREATIVO</div><h1>MIS DISEÑOS.</h1>
+  <p>Todo lo que creaste y guardaste en este dispositivo.</p>
+  <div id="designList" class="cards"></div>
+ </section>
 
-<section class="page" id="page-outfits">
-<h1>Crear outfits</h1><p>Combiná prendas, calzado y accesorios.</p>
-<div class="cards">
-<div class="card"><div class="thumb">👕</div><h3>Parte superior</h3><p>Remeras, hoodies y camperas.</p></div>
-<div class="card"><div class="thumb">👖</div><h3>Parte inferior</h3><p>Pantalones y bermudas.</p></div>
-<div class="card"><div class="thumb">👟</div><h3>Calzado</h3><p>Completá tu conjunto.</p></div>
-<div class="card"><div class="thumb">🧢</div><h3>Accesorios</h3><p>Los detalles finales.</p></div>
-</div>
-</section>
+ <section class="page" id="outfits">
+  <div class="eyebrow">COMBINACIONES</div><h1>CREAR OUTFITS.</h1>
+  <p>Ideas para combinar prendas, calzado y accesorios.</p>
+  <div class="cards">
+   <div class="feature"><div class="eyebrow">01 / STREETWEAR</div><div class="big">OVERSIZED</div><p>Camiseta amplia, pantalón recto y zapatillas urbanas.</p></div>
+   <div class="feature"><div class="eyebrow">02 / MINIMAL</div><div class="big">LESS IS MORE</div><p>Colores neutros, líneas limpias y pocos accesorios.</p></div>
+   <div class="feature"><div class="eyebrow">03 / SPORT</div><div class="big">SPORT MODE</div><p>Prendas cómodas, siluetas deportivas y contrastes.</p></div>
+  </div>
+ </section>
 
-<section class="page" id="page-marca">
-<h1>Mi marca</h1><p>Construí la identidad de tu marca.</p>
-<div class="form"><label>Nombre de tu marca</label><input id="brandName" placeholder="Nombre"><label>Descripción</label><textarea id="brandDesc" rows="4" placeholder="¿Qué representa tu marca?"></textarea><button class="btn primary" onclick="saveBrand()">Guardar identidad</button><p id="brandStatus"></p></div>
-</section>
+ <section class="page" id="brand">
+  <div class="eyebrow">IDENTIDAD CREATIVA</div><h1>MI MARCA.</h1>
+  <p>Construí la identidad de tu proyecto.</p>
+  <div class="panel" style="max-width:650px">
+   <div class="control"><label>Nombre de marca</label><input id="brandName" type="text" placeholder="Nombre de tu marca"></div>
+   <div class="control"><label>Eslogan</label><input id="brandSlogan" type="text" placeholder="Tu frase de marca"></div>
+   <div class="control"><label>Descripción</label><input id="brandDescription" type="text" placeholder="¿Qué representa tu marca?"></div>
+   <button class="btn" onclick="saveBrand()">GUARDAR IDENTIDAD</button>
+   <div class="divider"></div><div id="brandPreview" class="feature blue"><div class="eyebrow">BRAND PREVIEW</div><div class="big">ASHM.</div><p>CREA TU PROPIO ESTILO. SE VOS.</p></div>
+  </div>
+ </section>
 
-<section class="page" id="page-estampados">
-<h1>Estampados</h1><p>Ideas para crear tus gráficos.</p>
-<div class="cards">
-<div class="card"><div class="thumb">✳</div><h3>Geométricos</h3><p>Formas y repeticiones.</p></div>
-<div class="card"><div class="thumb">〰</div><h3>Abstractos</h3><p>Composiciones libres.</p></div>
-<div class="card"><div class="thumb">Aa</div><h3>Tipográficos</h3><p>Letras y símbolos.</p></div>
-</div>
-</section>
+ <section class="page" id="prints">
+  <div class="eyebrow">RECURSOS VISUALES</div><h1>ESTAMPADOS.</h1>
+  <p>Probá ideas gráficas en tu editor. Seleccioná un símbolo para agregarlo a la prenda.</p>
+  <div class="cards">
+   <div class="design-card"><div class="design-thumb">✦</div><h3>Estrella</h3><button class="btn small" onclick="go('editor');addShape('star')">USAR ESTAMPADO</button></div>
+   <div class="design-card"><div class="design-thumb">◉</div><h3>Círculo</h3><button class="btn small" onclick="go('editor');addShape('circle')">USAR ESTAMPADO</button></div>
+   <div class="design-card"><div class="design-thumb">✚</div><h3>Cruz</h3><button class="btn small" onclick="go('editor');addShape('cross')">USAR ESTAMPADO</button></div>
+  </div>
+ </section>
 
-<section class="page" id="page-escuela">
-<h1>Escuela de diseño</h1><p>Conceptos para aprender diseño de moda.</p>
-<div class="cards">
-<div class="card"><h3>Bocetos</h3><p>Practicá siluetas, proporciones y formas.</p></div>
-<div class="card"><h3>Tipografía</h3><p>Elegí letras que representen tu diseño.</p></div>
-<div class="card"><h3>Composición</h3><p>Aprendé a distribuir los elementos.</p></div>
-<div class="card"><h3>Streetwear</h3><p>Explorá siluetas y estilos urbanos.</p></div>
-</div>
-</section>
+ <section class="page" id="school">
+  <div class="eyebrow">APRENDÉ Y EXPERIMENTÁ</div><h1>ESCUELA DE DISEÑO.</h1>
+  <div class="cards">
+   <div class="feature"><div class="eyebrow">LECCIÓN 01</div><div class="big">SILUETAS</div><p>La silueta define la forma general de una prenda: oversized, slim, regular y cropped.</p></div>
+   <div class="feature"><div class="eyebrow">LECCIÓN 02</div><div class="big">COLOR</div><p>Aprendé a combinar tonos complementarios, análogos y neutros.</p></div>
+   <div class="feature"><div class="eyebrow">LECCIÓN 03</div><div class="big">IDENTIDAD</div><p>Una colección coherente necesita una idea, un lenguaje visual y una intención.</p></div>
+  </div>
+ </section>
 
-<section class="page" id="page-vista">
-<h1>Vista 360°</h1><p>Podés girar la camiseta en el editor para ver el frente y la espalda. Esta versión utiliza un mockup ilustrado, no un modelo profesional de tela 3D.</p><button class="btn primary" onclick="go('disenar')">Abrir editor</button>
-</section>
+ <section class="page" id="view">
+  <div class="eyebrow">VISTA DE PRENDA</div><h1>VISTA AMPLIADA.</h1>
+  <p>Usá el editor para cambiar el frente, la espalda y el tamaño de la prenda.</p>
+  <button class="btn" onclick="go('editor')">ABRIR EDITOR ↗</button>
+  <div class="panel" style="margin-top:20px"><p>Esta versión ofrece una vista ilustrada frontal y trasera. Todavía no es un modelo 3D real con rotación libre.</p></div>
+ </section>
 
-<section class="page" id="page-colecciones">
-<h1>Mis colecciones</h1><p>Organizá tus diseños por temporada o estilo.</p>
-<div class="form"><label>Nueva colección</label><input id="collectionName" placeholder="Ej. Streetwear"><button class="btn primary" onclick="addCollection()">Crear colección</button></div><div class="cards" id="collections"></div>
-</section>
+ <section class="page" id="collections">
+  <div class="eyebrow">ORGANIZACIÓN</div><h1>MIS COLECCIONES.</h1>
+  <div class="panel" style="max-width:600px">
+   <div class="control"><label>Nueva colección</label><input id="collectionName" type="text" placeholder="Ej. Colección 001"></div>
+   <button class="btn" onclick="addCollection()">CREAR COLECCIÓN</button>
+   <div class="divider"></div><div id="collectionList"></div>
+  </div>
+ </section>
 
-<section class="page" id="page-asistente">
-<h1>Asistente de diseño</h1><p>Organizá tus ideas paso a paso.</p>
-<div class="form"><label>Describí tu idea</label><textarea id="assistantInput" rows="4" placeholder="Quiero una hoodie amplia..."></textarea><button class="btn primary" onclick="organizeIdea()">Organizar idea</button><p id="assistantOutput"></p></div>
-</section>
+ <section class="page" id="assistant">
+  <div class="eyebrow">ASISTENTE LOCAL</div><h1>ASISTENTE DE DISEÑO.</h1>
+  <p>Una pequeña guía para ordenar tus ideas. No requiere conexión ni usa inteligencia artificial.</p>
+  <div class="panel" style="max-width:650px">
+   <div class="control"><label>¿Qué querés diseñar?</label><select id="assistType"><option>Camiseta</option><option>Hoodie</option><option>Pantalón</option><option>Conjunto</option></select></div>
+   <div class="control"><label>Estética</label><select id="assistStyle"><option>Streetwear</option><option>Minimalista</option><option>Deportiva</option><option>Experimental</option></select></div>
+   <button class="btn" onclick="makeBrief()">CREAR BRIEF</button>
+   <div class="divider"></div><div id="briefResult" class="notice">Tu brief aparecerá acá.</div>
+  </div>
+ </section>
 
-<section class="page" id="page-inspiracion">
-<h1>Inspiración</h1><p>Guardá ideas y referencias.</p>
-<div class="form"><label>Nueva referencia</label><textarea id="inspoInput" rows="3" placeholder="Anotá una idea..."></textarea><button class="btn primary" onclick="addInspo()">Guardar</button></div><div class="cards" id="inspoList"></div>
-</section>
+ <section class="page" id="inspiration">
+  <div class="eyebrow">REFERENCIAS E IDEAS</div><h1>INSPIRACIÓN.</h1>
+  <div class="feature blue" style="margin-bottom:18px"><div class="eyebrow">MÚSICA / ESTÉTICA URBANA</div><div class="big">TRUENO.</div><p>Usá la energía del hip-hop, los contrastes y la gráfica urbana como punto de partida para crear algo propio.</p></div>
+  <div class="panel" style="max-width:650px">
+   <div class="control"><label>Guardar una idea o referencia</label><input id="inspirationText" type="text" placeholder="Escribí tu idea..."></div>
+   <button class="btn" onclick="addInspiration()">GUARDAR IDEA</button>
+   <div class="divider"></div><div id="inspirationList"></div>
+  </div>
+ </section>
 
-<section class="page" id="page-ideas">
-<h1>Generador de ideas</h1><p>Generador local de conceptos. No utiliza IA ni servicios pagos.</p>
-<div class="form"><button class="btn primary" onclick="randomIdea()">Generar idea</button><p id="randomIdea"></p><label>Tu propio concepto</label><textarea id="prompt" rows="4" placeholder="Describí tu diseño..."></textarea><button class="btn" onclick="prepareIdea()">Preparar concepto</button><p id="promptOutput"></p></div>
-</section>
+ <section class="page" id="ideas">
+  <div class="eyebrow">IDEAS CREATIVAS</div><h1>GENERADOR DE IDEAS.</h1>
+  <p>Generador local de combinaciones. No es una IA, pero puede ayudarte a salir del bloqueo creativo.</p>
+  <div class="panel" style="max-width:650px">
+   <div id="ideaResult" class="feature blue"><div class="eyebrow">TU PRÓXIMA IDEA</div><div class="big">¿QUÉ VAS A CREAR?</div><p>Generá una combinación para empezar.</p></div>
+   <button class="btn" style="margin-top:15px" onclick="generateIdea()">GENERAR IDEA ↗</button>
+  </div>
+ </section>
 
-<section class="page" id="page-cuenta">
-<h1>Mi cuenta</h1><p>Perfil local de tu estudio.</p>
-<div class="form"><label>Nombre de tu espacio</label><input id="profile" placeholder="Mi estudio"><button class="btn primary" onclick="saveProfile()">Guardar</button></div>
-</section>
-
-<section class="page" id="page-config">
-<h1>Configuración</h1><p>Respaldo de tus proyectos.</p>
-<div class="form"><button class="btn primary" onclick="backup()">Descargar copia de seguridad</button><label>Restaurar copia de seguridad</label><input type="file" id="restore" accept=".json,application/json"><p>Los datos se guardan en este navegador. Descargá una copia si querés conservarlos al cambiar de dispositivo.</p></div>
-</section>
+ <section class="page" id="settings">
+  <div class="eyebrow">PREFERENCIAS</div><h1>CONFIGURACIÓN.</h1>
+  <div class="panel" style="max-width:650px">
+   <h2>Datos y copias de seguridad</h2>
+   <p>Los diseños se guardan en el almacenamiento local de este navegador. No se sincronizan automáticamente con otros dispositivos.</p>
+   <button class="btn" onclick="backupData()">EXPORTAR RESPALDO JSON</button>
+   <div class="divider"></div>
+   <label class="notice">Restaurar respaldo JSON</label>
+   <input type="file" id="restoreFile" accept=".json,application/json" onchange="restoreData(event)">
+   <div class="divider"></div>
+   <p class="notice">ASHM. es un prototipo personal. No tiene cuentas, sincronización en la nube ni funciones de IA conectadas.</p>
+  </div>
+ </section>
 </main>
 </div>
 
 <script>
 const $=id=>document.getElementById(id);
-let selected=null,history=[],angle=0,drawingMode=false,pen=false,ctx=null;
-const canvas=$('canvas'),shirt=$('shirt'),wrap=$('shirtWrap');
+let currentPage='home', garmentType='shirt', backView=false;
+let selected=null, garmentScale=1, itemCount=0;
+const layer=$('designLayer');
+const STORE='ashm_studio_v2';
 
-function go(name){
+function getData(){
+ try{return JSON.parse(localStorage.getItem(STORE))||{designs:[],collections:[],ideas:[],brand:{}}}
+ catch(e){return {designs:[],collections:[],ideas:[],brand:{}}}
+}
+function putData(data){localStorage.setItem(STORE,JSON.stringify(data))}
+function go(page){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- $('page-'+name).classList.add('active');
- document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
- $('breadcrumb').textContent='ASHM. / '+name.toUpperCase();
- if(name==='mis-disenos')renderSaved();
- if(name==='colecciones')renderCollections();
- if(name==='inspiracion')renderInspo();
+ $(page).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+ $('currentSection').textContent=page.toUpperCase();
+ currentPage=page;
+ if(page==='designs')renderDesigns();
+ if(page==='collections')renderCollections();
+ if(page==='inspiration')renderInspirations();
+ if(page==='brand')loadBrand();
 }
-document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
 
-function snapshot(){history.push(canvas.innerHTML);if(history.length>15)history.shift()}
-function undo(){if(!history.length)return;canvas.innerHTML=history.pop();selected=null;wire();renderLayers()}
-function select(el){
- document.querySelectorAll('.design').forEach(x=>x.classList.remove('selected'));
- selected=el;if(el)el.classList.add('selected');renderLayers();
+function setGarment(type,btn){
+ garmentType=type;
+ document.querySelectorAll('.tools .tool').forEach(x=>x.classList.remove('selected'));
+ if(btn)btn.classList.add('selected');
+ const body=$('bodyPath');
+ const label=type==='shirt'?'CAMISETA':type==='hoodie'?'HOODIE':'BUZO';
+ $('garmentName').textContent=label+' / '+(backView?'ESPALDA':'FRENTE');
+ if(type==='hoodie'){
+  body.setAttribute('d','M220 95 L260 78 Q300 125 340 78 L380 95 L460 135 L520 255 L450 285 L420 225 L410 475 Q300 500 190 475 L180 225 L150 285 L80 255 L140 135 Z');
+  $('backLabel').style.display=backView?'block':'none';
+ }else if(type==='sweatshirt'){
+  body.setAttribute('d','M220 95 L260 78 Q300 125 340 78 L380 95 L460 135 L520 255 L450 285 L420 225 L410 475 Q300 500 190 475 L180 225 L150 285 L80 255 L140 135 Z');
+  $('backLabel').style.display=backView?'block':'none';
+ }else{
+  body.setAttribute('d','M220 95 L260 78 Q300 125 340 78 L380 95 L460 135 L520 255 L450 285 L420 225 L410 475 Q300 500 190 475 L180 225 L150 285 L80 255 L140 135 Z');
+  $('backLabel').style.display=backView?'block':'none';
+ }
 }
-function wire(){
- document.querySelectorAll('.design').forEach(el=>{
-  let sx,sy,left,top;
-  el.onpointerdown=e=>{
-   e.stopPropagation();select(el);
-   let r=el.getBoundingClientRect(),c=canvas.getBoundingClientRect();
-   sx=e.clientX;sy=e.clientY;left=r.left-c.left;top=r.top-c.top;
-   el.setPointerCapture(e.pointerId);
-  };
-  el.onpointermove=e=>{
-   if(!el.hasPointerCapture(e.pointerId))return;
-   let c=canvas.getBoundingClientRect();
-   el.style.left=((left+e.clientX-sx)/c.width*100)+'%';
-   el.style.top=((top+e.clientY-sy)/c.height*100)+'%';
-  };
- });
+function turnGarment(){
+ backView=!backView;
+ $('backLabel').style.display=backView?'block':'none';
+ $('garmentName').textContent=(garmentType==='shirt'?'CAMISETA':garmentType==='hoodie'?'HOODIE':'BUZO')+' / '+(backView?'ESPALDA':'FRENTE');
+}
+function changeFabric(color){
+ $('bodyPath').setAttribute('fill',color);
+}
+function scaleGarment(value){
+ garmentScale=Number(value)/100;
+ $('garment').setAttribute('transform',`translate(300 280) scale(${garmentScale}) translate(-300 -280)`);
+ $('garmentSizeValue').textContent=value+'%';
+}
+function createItem(inner,type){
+ const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+ g.setAttribute('class','design-item');
+ g.setAttribute('data-type',type);
+ g.setAttribute('data-x','300');g.setAttribute('data-y','270');
+ g.setAttribute('data-scale','1');g.setAttribute('data-rotation','0');
+ g.setAttribute('transform','translate(300 270)');
+ g.innerHTML=inner;
+ layer.appendChild(g);
+ selectItem(g);refreshLayers();
+ return g;
 }
 function addText(){
- let value=$('textValue').value.trim()||'TU DISEÑO';
- snapshot();
- let el=document.createElement('div');el.className='design';el.textContent=value;
- el.style.fontFamily=$('font').value;el.style.color=$('ink').value;
- el.style.fontSize=$('size').value+'px';
- canvas.append(el);wire();select(el);
+ const value=prompt('Escribí el texto para tu prenda:','ASHM.');
+ if(value===null||!value.trim())return;
+ const safe=value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ createItem(`<text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-size="25" font-weight="900" letter-spacing="2" fill="#17243b">${safe}</text>`,'text');
 }
-function addShape(){
- snapshot();let el=document.createElement('div');el.className='design';
- el.textContent='✦';el.style.fontSize='55px';el.style.color=$('ink').value;
- canvas.append(el);wire();select(el);
+function addShape(shape){
+ let content='';
+ if(shape==='star')content='<path d="M0 -28 L7 -8 L28 -8 L11 5 L17 27 L0 14 L-17 27 L-11 5 L-28 -8 L-7 -8 Z" fill="#17243b"/>';
+ if(shape==='circle')content='<circle r="22" fill="#17243b"/>';
+ if(shape==='cross')content='<path d="M-7 -25 H7 V-7 H25 V7 H7 V25 H-7 V7 H-25 V-7 H-7 Z" fill="#17243b"/>';
+ createItem(content,shape);
 }
-function deleteSelected(){if(!selected)return;snapshot();selected.remove();selected=null;renderLayers()}
-function renderLayers(){
- let items=[...canvas.querySelectorAll('.design')];
- $('layers').innerHTML=items.length?items.map((x,i)=>`<div class="layer ${x===selected?'active':''}" onclick="select(document.querySelectorAll('.design')[${i}])">Capa ${i+1}: ${escapeHTML(x.textContent.slice(0,18)||'Imagen')}</div>`).join(''):'Sin elementos';
-}
-function layerMove(direction){
- if(!selected)return;
- let items=[...canvas.querySelectorAll('.design')],i=items.indexOf(selected),j=i+direction;
- if(j<0||j>=items.length)return;
- snapshot();
- if(direction<0)selected.parentNode.insertBefore(selected,items[j]);
- else selected.parentNode.insertBefore(items[j],selected);
- renderLayers();
-}
-$('upload').onchange=e=>{
- let file=e.target.files[0];if(!file)return;
- let reader=new FileReader();
+function addImage(event){
+ const file=event.target.files[0];if(!file)return;
+ if(!file.type.startsWith('image/'))return alert('Elegí un archivo de imagen.');
+ const reader=new FileReader();
  reader.onload=()=>{
-  snapshot();let el=document.createElement('div');el.className='design';
-  let img=document.createElement('img');img.src=reader.result;el.append(img);
-  canvas.append(el);wire();select(el);
+  const url=reader.result;
+  createItem(`<image href="${url}" x="-45" y="-45" width="90" height="90" preserveAspectRatio="xMidYMid meet"/>`,'image');
  };
- reader.readAsDataURL(file);e.target.value='';
-};
-$('shirtColor').oninput=e=>document.documentElement.style.setProperty('--shirt',e.target.value);
-$('ink').oninput=e=>{if(selected)selected.style.color=e.target.value};
-$('size').oninput=e=>{if(selected)selected.style.fontSize=e.target.value+'px'};
-
-function turn(degrees){
- angle+=degrees;shirt.style.transform=`rotateY(${angle}deg)`;
- $('viewLabel').textContent=(Math.abs(angle%360)<90||Math.abs(angle%360)>270?'Frente':'Espalda');
+ reader.readAsDataURL(file);event.target.value='';
 }
-let rotating=false,lastX=0;
-wrap.onpointerdown=e=>{rotating=true;lastX=e.clientX;wrap.setPointerCapture(e.pointerId)};
-wrap.onpointermove=e=>{if(!rotating)return;let dx=e.clientX-lastX;lastX=e.clientX;turn(dx*.8)};
-wrap.onpointerup=()=>rotating=false;
-wrap.onpointercancel=()=>rotating=false;
-
-function toggleDraw(){
- drawingMode=!drawingMode;
- $('drawButton').style.color=drawingMode?'#91b3e6':'#c7d5e8';
- let c=$('drawing');
- c.style.pointerEvents=drawingMode?'auto':'none';
- c.style.cursor='crosshair';
- c.width=c.clientWidth*devicePixelRatio;c.height=c.clientHeight*devicePixelRatio;
- ctx=c.getContext('2d');ctx.scale(devicePixelRatio,devicePixelRatio);
- ctx.strokeStyle=$('ink').value;ctx.lineWidth=3;ctx.lineCap='round';
+function selectItem(el){
+ if(selected)selected.classList.remove('selected');
+ selected=el;
+ if(!el){
+  $('elementText').value='';
+  $('elementSize').value=100;$('elementRotation').value=0;
+  $('elementSizeValue').textContent='100%';$('rotationValue').textContent='0°';
+  refreshLayers();return;
+ }
+ el.classList.add('selected');
+ const text=el.querySelector('text');
+ $('elementText').value=text?text.textContent:'';
+ const scale=Number(el.dataset.scale||1)*100;
+ const rot=Number(el.dataset.rotation||0);
+ $('elementSize').value=Math.min(250,Math.max(20,scale));
+ $('elementRotation').value=rot;
+ $('elementSizeValue').textContent=Math.round(scale)+'%';
+ $('rotationValue').textContent=rot+'°';
+ const colored=el.querySelector('[fill]');
+ if(colored && /^#[0-9a-f]{6}$/i.test(colored.getAttribute('fill'))) $('elementColor').value=colored.getAttribute('fill');
+ refreshLayers();
 }
-$('drawing').onpointerdown=e=>{
- if(!drawingMode)return;pen=true;
- let r=e.target.getBoundingClientRect();ctx.beginPath();ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
-};
-$('drawing').onpointermove=e=>{
- if(!pen||!drawingMode)return;
- let r=e.target.getBoundingClientRect();ctx.lineTo(e.clientX-r.left,e.clientY-r.top);ctx.stroke();
-};
-$('drawing').onpointerup=()=>pen=false;
-$('drawing').onpointerleave=()=>pen=false;
-
-function saveDesign(){
- let designs=JSON.parse(localStorage.getItem('ashm-designs')||'[]');
- designs.unshift({
-  name:'Diseño '+new Date().toLocaleString(),
-  markup:canvas.innerHTML,
-  color:getComputedStyle(document.documentElement).getPropertyValue('--shirt').trim(),
-  angle
+function updateTransform(el){
+ const x=Number(el.dataset.x||300),y=Number(el.dataset.y||270);
+ const s=Number(el.dataset.scale||1),r=Number(el.dataset.rotation||0);
+ el.setAttribute('transform',`translate(${x} ${y}) rotate(${r}) scale(${s})`);
+}
+function editText(value){if(!selected)return;const t=selected.querySelector('text');if(t)t.textContent=value}
+function changeElementColor(color){
+ if(!selected)return;
+ selected.querySelectorAll('text,path,circle').forEach(el=>el.setAttribute('fill',color));
+}
+function scaleElement(value){
+ if(!selected)return;
+ selected.dataset.scale=Number(value)/100;updateTransform(selected);
+ $('elementSizeValue').textContent=value+'%';
+}
+function rotateElement(value){
+ if(!selected)return;
+ selected.dataset.rotation=value;updateTransform(selected);
+ $('rotationValue').textContent=value+'°';
+}
+function deleteSelected(){if(!selected)return;selected.remove();selected=null;selectItem(null)}
+function clearDesign(){if(!confirm('¿Eliminar todos los elementos de esta prenda?'))return;layer.innerHTML='';selected=null;selectItem(null)}
+function refreshLayers(){
+ const items=[...layer.children];
+ $('layers').innerHTML='';
+ if(!items.length){$('layers').innerHTML='<div class="notice">Todavía no hay elementos.</div>';return}
+ items.slice().reverse().forEach((el,index)=>{
+  const real=items.length-1-index;
+  const row=document.createElement('div');
+  row.className='layer'+(el===selected?' active':'');
+  row.textContent=(el.dataset.type||'Elemento')+' '+(real+1);
+  row.onclick=()=>selectItem(el);
+  $('layers').appendChild(row);
  });
- try{localStorage.setItem('ashm-designs',JSON.stringify(designs.slice(0,25)));alert('Diseño guardado en este navegador.');}
- catch(e){alert('No hay espacio suficiente. Descargá una copia de seguridad.');}
 }
-function renderSaved(){
- let a=JSON.parse(localStorage.getItem('ashm-designs')||'[]');
- $('saved').innerHTML=a.length?a.map((d,i)=>`<div class="card"><div class="thumb">👕</div><h3>${escapeHTML(d.name)}</h3><p>Guardado localmente</p><button class="btn" onclick="openSaved(${i})">Abrir</button> <button class="btn" onclick="removeSaved(${i})">Borrar</button></div>`).join(''):'<div class="empty">Todavía no guardaste diseños.</div>';
+function moveLayer(direction){
+ if(!selected)return;
+ if(direction<0 && selected.nextElementSibling)layer.insertBefore(selected.nextElementSibling,selected);
+ if(direction>0 && selected.previousElementSibling)layer.insertBefore(selected,selected.previousElementSibling);
+ refreshLayers();
 }
-function openSaved(i){
- let d=JSON.parse(localStorage.getItem('ashm-designs')||'[]')[i];
- canvas.innerHTML=d.markup;angle=d.angle||0;shirt.style.transform=`rotateY(${angle}deg)`;
- document.documentElement.style.setProperty('--shirt',d.color||'#f4f4f4');
- selected=null;wire();renderLayers();go('disenar');
+let drag=null;
+$('shirtSvg').addEventListener('pointerdown',e=>{
+ const target=e.target.closest('.design-item');
+ if(!target)return;
+ e.preventDefault();selectItem(target);
+ const pt=svgPoint(e);
+ drag={el:target,px:pt.x,py:pt.y,x:Number(target.dataset.x||300),y:Number(target.dataset.y||270)};
+ $('shirtSvg').setPointerCapture(e.pointerId);
+});
+$('shirtSvg').addEventListener('pointermove',e=>{
+ if(!drag)return;
+ const pt=svgPoint(e);
+ drag.el.dataset.x=drag.x+(pt.x-drag.px);
+ drag.el.dataset.y=drag.y+(pt.y-drag.py);
+ updateTransform(drag.el);
+});
+$('shirtSvg').addEventListener('pointerup',()=>drag=null);
+$('shirtSvg').addEventListener('pointercancel',()=>drag=null);
+function svgPoint(e){
+ const p=$('shirtSvg').createSVGPoint();p.x=e.clientX;p.y=e.clientY;
+ return p.matrixTransform($('shirtSvg').getScreenCTM().inverse());
 }
-function removeSaved(i){
- let a=JSON.parse(localStorage.getItem('ashm-designs')||'[]');a.splice(i,1);
- localStorage.setItem('ashm-designs',JSON.stringify(a));renderSaved();
+function snapshot(){
+ return {type:garmentType,back:backView,color:$('bodyPath').getAttribute('fill'),scale:garmentScale,items:layer.innerHTML};
+}
+function loadSnapshot(data){
+ garmentType=data.type||'shirt';backView=!!data.back;
+ setGarment(garmentType,null);
+ $('backLabel').style.display=backView?'block':'none';
+ $('bodyPath').setAttribute('fill',data.color||'#e5e7e7');
+ scaleGarment((data.scale||1)*100);
+ layer.innerHTML=data.items||'';
+ selected=null;selectItem(null);
+}
+function saveDesign(){
+ const name=prompt('Nombre de tu diseño:','Mi diseño');
+ if(name===null||!name.trim())return;
+ const data=getData();data.designs.unshift({id:Date.now(),name:name.trim(),date:new Date().toLocaleDateString(),snapshot:snapshot()});
+ putData(data);updateCount();alert('Diseño guardado en este dispositivo.');
+}
+function renderDesigns(){
+ const data=getData(),list=$('designList');
+ list.innerHTML='';
+ if(!data.designs.length){list.innerHTML='<div class="empty">Todavía no guardaste diseños.</div>';return}
+ data.designs.forEach(d=>{
+  const card=document.createElement('div');card.className='design-card';
+  card.innerHTML=`<div class="design-thumb">ASHM.</div><h3></h3><p></p><button class="btn small">ABRIR</button> <button class="btn danger small">BORRAR</button>`;
+  card.querySelector('h3').textContent=d.name;
+  card.querySelector('p').textContent=d.date||'Diseño guardado';
+  card.querySelector('.btn').onclick=()=>{loadSnapshot(d.snapshot);go('editor')};
+  card.querySelector('.danger').onclick=()=>{if(confirm('¿Borrar este diseño?')){const x=getData();x.designs=x.designs.filter(v=>v.id!==d.id);putData(x);renderDesigns();updateCount()}};
+  list.appendChild(card);
+ });
+}
+function updateCount(){
+ const n=getData().designs.length;
+ $('homeCount').textContent=String(n).padStart(2,'0')+' DISEÑOS';
+}
+function exportPNG(){
+ const clone=$('shirtSvg').cloneNode(true);
+ clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+ clone.setAttribute('width','1200');clone.setAttribute('height','1120');
+ clone.querySelectorAll('.selected').forEach(el=>el.classList.remove('selected'));
+ const xml=new XMLSerializer().serializeToString(clone);
+ const blob=new Blob([xml],{type:'image/svg+xml;charset=utf-8'});
+ const url=URL.createObjectURL(blob),img=new Image();
+ img.onload=()=>{
+  const c=document.createElement('canvas');c.width=1200;c.height=1120;
+  const ctx=c.getContext('2d');ctx.fillStyle='#e9e9e6';ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(img,0,0,1200,1120);
+  URL.revokeObjectURL(url);
+  const a=document.createElement('a');a.download='ASHM-diseno.png';a.href=c.toDataURL('image/png');a.click();
+ };
+ img.onerror=()=>{URL.revokeObjectURL(url);alert('No se pudo exportar esta imagen. Probá con otra imagen o quitá el elemento que falla.')};
+ img.src=url;
 }
 function saveBrand(){
- localStorage.setItem('ashm-brand',JSON.stringify({name:$('brandName').value,description:$('brandDesc').value}));
- $('brandStatus').textContent='Identidad guardada.';
+ const d=getData();d.brand={name:$('brandName').value,slogan:$('brandSlogan').value,description:$('brandDescription').value};putData(d);loadBrand();alert('Identidad guardada.');
+}
+function loadBrand(){
+ const b=getData().brand||{};
+ $('brandName').value=b.name||'';$('brandSlogan').value=b.slogan||'';$('brandDescription').value=b.description||'';
+ $('brandPreview').querySelector('.big').textContent=b.name||'ASHM.';
+ $('brandPreview').querySelector('p').textContent=b.slogan||'CREA TU PROPIO ESTILO. SE VOS.';
 }
 function addCollection(){
- let v=$('collectionName').value.trim();if(!v)return;
- let a=JSON.parse(localStorage.getItem('ashm-collections')||'[]');a.push(v);
- localStorage.setItem('ashm-collections',JSON.stringify(a));$('collectionName').value='';renderCollections();
+ const name=$('collectionName').value.trim();if(!name)return;
+ const d=getData();d.collections.push(name);putData(d);$('collectionName').value='';renderCollections();
 }
 function renderCollections(){
- let a=JSON.parse(localStorage.getItem('ashm-collections')||'[]');
- $('collections').innerHTML=a.length?a.map(v=>`<div class="card"><div class="thumb">▧</div><h3>${escapeHTML(v)}</h3><p>Colección personal</p></div>`).join(''):'<div class="empty">Todavía no creaste colecciones.</div>';
+ const list=$('collectionList'),items=getData().collections;list.innerHTML='';
+ if(!items.length){list.textContent='Todavía no hay colecciones.';return}
+ items.forEach((name,i)=>{const row=document.createElement('div');row.className='layer';row.textContent=name;const del=document.createElement('button');del.textContent='×';del.onclick=()=>{const d=getData();d.collections.splice(i,1);putData(d);renderCollections()};row.appendChild(del);list.appendChild(row)});
 }
-function organizeIdea(){
- let v=$('assistantInput').value.trim();
- $('assistantOutput').textContent=v?'Tu idea: '+v+'. Definí la prenda, el corte, los colores, el gráfico y dónde ubicarlo.':'Escribí tu idea primero.';
+function addInspiration(){
+ const value=$('inspirationText').value.trim();if(!value)return;
+ const d=getData();d.ideas.unshift(value);putData(d);$('inspirationText').value='';renderInspirations();
 }
-function addInspo(){
- let v=$('inspoInput').value.trim();if(!v)return;
- let a=JSON.parse(localStorage.getItem('ashm-inspo')||'[]');a.unshift(v);
- localStorage.setItem('ashm-inspo',JSON.stringify(a));$('inspoInput').value='';renderInspo();
+function renderInspirations(){
+ const list=$('inspirationList');list.innerHTML='';
+ getData().ideas.forEach((v,i)=>{const row=document.createElement('div');row.className='layer';row.textContent=v;list.appendChild(row)});
+ if(!list.children.length)list.textContent='Todavía no guardaste ideas.';
 }
-function renderInspo(){
- let a=JSON.parse(localStorage.getItem('ashm-inspo')||'[]');
- $('inspoList').innerHTML=a.length?a.map(v=>`<div class="card"><p>${escapeHTML(v)}</p></div>`).join(''):'<div class="empty">Tus referencias aparecerán acá.</div>';
+function makeBrief(){
+ const type=$('assistType').value,style=$('assistStyle').value;
+ const suggestions={
+  Streetwear:'probá una silueta amplia, un gráfico protagonista y contraste de tonos.',
+  Minimalista:'usá pocos colores, tipografía limpia y detalles discretos.',
+  Deportiva:'experimentá con paneles, líneas dinámicas y materiales visuales técnicos.',
+  Experimental:'combiná proporciones inesperadas, gráficos y bloques de color.'
+ };
+ $('briefResult').textContent=`BRIEF: Diseñá una prenda tipo ${type.toLowerCase()} con estética ${style.toLowerCase()}. ${suggestions[style]} Definí primero la idea central y después elegí los detalles.`;
 }
-const ideas=[
- 'Una hoodie oversized azul oscuro con gráficos tipográficos minimalistas.',
- 'Una camiseta blanca con un estampado abstracto en la espalda.',
- 'Un pantalón cargo negro con detalles geométricos.',
- 'Una campera urbana con una paleta de grises y azul.',
- 'Una remera amplia con un símbolo pequeño en el pecho.'
-];
-function randomIdea(){$('randomIdea').textContent=ideas[Math.floor(Math.random()*ideas.length)]}
-function prepareIdea(){
- let v=$('prompt').value.trim();$('promptOutput').textContent=v?'Concepto preparado: '+v:'Escribí tu concepto primero.';
+function generateIdea(){
+ const styles=['Streetwear','Minimalista','Deportivo','Experimental','Retro urbano'];
+ const colors=['azul noche y gris hielo','negro y blanco','azul eléctrico y crema','gris carbón y lavanda','verde oliva y negro'];
+ const details=['tipografía grande en la espalda','símbolo pequeño en el pecho','paneles geométricos en las mangas','estampado abstracto lateral','contraste de costuras'];
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ $('ideaResult').innerHTML=`<div class="eyebrow">IDEA GENERADA</div><div class="big">${pick(styles).toUpperCase()}</div><p>Paleta: ${pick(colors)}.<br>Detalle: ${pick(details)}.</p>`;
 }
-function saveProfile(){
- let v=$('profile').value.trim()||'Mi estudio';
- localStorage.setItem('ashm-profile',v);alert('Perfil guardado.');
-}
-function backup(){
- let keys=['ashm-designs','ashm-brand','ashm-collections','ashm-inspo','ashm-profile'];
- let data={};keys.forEach(k=>data[k]=localStorage.getItem(k));
- let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- let url=URL.createObjectURL(blob),a=document.createElement('a');
+function backupData(){
+ const blob=new Blob([JSON.stringify(getData(),null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='ashm-respaldo.json';a.click();URL.revokeObjectURL(url);
 }
-$('restore').onchange=e=>{
- let file=e.target.files[0];if(!file)return;
- let reader=new FileReader();
+function restoreData(event){
+ const file=event.target.files[0];if(!file)return;
+ const reader=new FileReader();
  reader.onload=()=>{
   try{
-   let data=JSON.parse(reader.result);
-   Object.entries(data).forEach(([k,v])=>{if(k.startsWith('ashm-')&&v!==null)localStorage.setItem(k,v)});
-   alert('Respaldo restaurado. Recargá la página.');
-  }catch(err){alert('El archivo no es un respaldo válido.');}
+   const data=JSON.parse(reader.result);
+   if(!data||!Array.isArray(data.designs)||!Array.isArray(data.collections)||!Array.isArray(data.ideas))throw new Error();
+   putData(data);updateCount();renderDesigns();renderCollections();renderInspirations();alert('Respaldo restaurado.');
+  }catch(e){alert('El archivo no parece ser un respaldo válido de ASHM.')}
  };
  reader.readAsText(file);
-};
-function escapeHTML(s){
- return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+updateCount();loadBrand();renderCollections();renderInspirations();
 </script>
 </body>
 </html>
